@@ -1,0 +1,26 @@
+@startuml
+
+rectangle "CarTrack in Operational phase" as CT {
+    "Track Car" as (Track)
+    "Display the current location of the car" as (Curr)
+    "Display the 10 latest locations of the car" as (Lat)
+}
+actor "Car Owner" as co
+rectangle "External Systems" as ExSys{
+    rectangle GpsModule as gps
+    rectangle Car as car
+    rectangle AwsSNS as SNS
+    database Dynamo as DB
+    rectangle FrontApp as app
+    rectangle ApiGateway as api
+}
+
+left to right direction
+(Track).>(Curr): include
+(Track).>(Lat): include
+
+:co:-->(Track)
+
+ExSys --> (Track)
+
+@enduml

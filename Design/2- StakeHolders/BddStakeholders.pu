@@ -1,0 +1,23 @@
+@startuml
+
+
+actor "Car Owner" as co
+rectangle GpsModule as gps
+rectangle Car as car
+rectangle carTrack as CT #LightBlue
+rectangle AwsSNS as SNS
+database Dynamo as DB
+rectangle FrontApp as app
+rectangle ApiGateway as api
+
+CT-->co
+CT-->gps
+CT-->car
+CT-->SNS
+CT-->DB
+CT-->app
+CT-->api
+
+
+
+@enduml
