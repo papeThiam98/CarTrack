@@ -32,10 +32,6 @@ jobs:
       - name: Check current directory
         run: pwd
 
-      # Lister les fichiers et dossiers dans le répertoire de travail actuel
-      - name: Switch repository
-        run: cd myCarServices
-
       # Lancer les tests
       - name: Run tests
         run: npm test
