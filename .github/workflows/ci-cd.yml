@@ -1,0 +1,56 @@
+name: CI/CD Pipeline
+
+# Déclencher le workflow sur chaque push ou pull request vers la branche main
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      # Cloner le dépôt
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Configurer Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
+        with:
+          node-version: '18'  # Choisis la version de Node.js utilisée dans ton projet
+
+      # Installer les dépendances du projet
+      - name: Install dependencies
+        run: npm install
+
+      # Lancer les tests
+      - name: Run tests
+        run: npm test
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      # Cloner à nouveau le dépôt pour déploiement
+      - name: Checkout code for deployment
+        uses: actions/checkout@v2
+
+      # Configurer AWS CLI
+      - name: Configure AWS CLI
+        uses: aws-actions/configure-aws-credentials@v1
+        with:
+          aws-access-key-id: AKIAW5BDQ5MLBDU44NGX
+          aws-secret-access-key: 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
+          aws-region: us-east-1  # Remplace par ta région AWS
+
+      # Déployer ton service avec Serverless Framework
+      - name: Deploy with Serverless
+        run: |
+          npm install -g serverless
+          serverless deploy
