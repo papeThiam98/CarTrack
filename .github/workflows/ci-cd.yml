@@ -48,8 +48,8 @@ jobs:
       - name: Configure AWS CLI
         uses: aws-actions/configure-aws-credentials@v1
         with:
-          aws-access-key-id: AKIAW5BDQ5MLBDU44NGX
-          aws-secret-access-key: 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
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
           aws-region: us-east-1  # Remplace par ta région AWS
 
       # Déployer ton service avec Serverless Framework
