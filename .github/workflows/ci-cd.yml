@@ -27,6 +27,7 @@ jobs:
       # Installer les dépendances du projet
       - name: Install dependencies
         run: npm install
+        working-directory: ./myCarServices
 
       # Lancer les tests
       #- name: Run tests
@@ -53,4 +54,5 @@ jobs:
       - name: Deploy with Serverless
         run: |
           npm install -g serverless
+          cd myCarServices
           serverless deploy
