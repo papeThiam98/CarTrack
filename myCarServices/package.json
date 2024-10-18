@@ -4,11 +4,17 @@
     "description": "A simple AWS Lambda service using Serverless Framework",
     "main": "handler.js",
     "scripts": {
-      "deploy": "serverless deploy"
+        "deploy": "serverless deploy",
+        "test": "mocha"
     },
-    "dependencies": {},
     "devDependencies": {
-      "serverless": "^3.30.0"
+        "chai": "^5.1.1",
+        "jest": "^29.7.0",
+        "mocha": "^10.7.3",
+        "serverless": "^3.30.0"
+    },
+    "dependencies": {
+        "assert": "^2.1.0",
+        "sinon": "^19.0.2"
     }
-  }
-  
+}
