@@ -1,0 +1,14 @@
+service: myCarServices # Nom de ton service
+
+provider:
+  name: aws
+  runtime: nodejs18.x  # Utiliser Node.js 18 pour la fonction Lambda
+  region: us-east-1    # Remplacer par ta région AWS
+
+functions:
+  hello:
+    handler: handler.hello  # Spécifier le fichier et la fonction à appeler
+    events:
+      - http:
+          path: hello
+          method: get  # Crée un endpoint HTTP pour appeler la fonction Lambda

@@ -1,0 +1,14 @@
+{
+    "name": "myCarServices",
+    "version": "1.0.0",
+    "description": "A simple AWS Lambda service using Serverless Framework",
+    "main": "handler.js",
+    "scripts": {
+      "deploy": "serverless deploy"
+    },
+    "dependencies": {},
+    "devDependencies": {
+      "serverless": "^3.30.0"
+    }
+  }
+  
