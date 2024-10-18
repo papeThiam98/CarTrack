@@ -1,0 +1,73 @@
+name: CI/CD Pipeline
+
+# Déclencher le workflow sur chaque push ou pull request vers la branche main
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+jobs:
+  build:
+    runs-on: ubuntu-latest    
+
+    steps:
+      # Cloner le dépôt
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      # Configurer Node.js
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'  # Choisis la version de Node.js utilisée dans ton projet
+
+      # Installer les dépendances du répertoire racine
+      - name: Install dependencies at root
+        run: npm ci
+    
+
+      # Installer les dépendances pour myCarServices
+      - name: Install dependencies for myCarServices
+        run: npm ci
+        working-directory: ./myCarServices
+
+      # Afficher le répertoire de travail actuel
+      - name: Check current directory
+        run: pwd
+
+      # Lancer les tests
+      - name: Run tests
+        run: npm test
+        working-directory: ./myCarServices
+      
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      # Cloner à nouveau le dépôt pour déploiement
+      - name: Checkout code for deployment
+        uses: actions/checkout@v4
+
+      # Configurer AWS CLI
+      - name: Configure AWS CLI
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: eu-west-1  # Remplace par ta région AWS
+
+      # Déployer ton service avec Serverless Framework
+      - name: Deploy with Serverless
+        run: |
+          npm install -g serverless
+          cd myCarServices
+          serverless deploy
+        env:
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SLS_ACCESS_KEY }}
