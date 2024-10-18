@@ -3,7 +3,7 @@ service: myCarServices # Nom de ton service
 provider:
   name: aws
   runtime: nodejs18.x  # Utiliser Node.js 18 pour la fonction Lambda
-  region: us-east-1    # Remplacer par ta région AWS
+  region: eu-west-1    # Remplacer par ta région AWS
 
 functions:
   hello:

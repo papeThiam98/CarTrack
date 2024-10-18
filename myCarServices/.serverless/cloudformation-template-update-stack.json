@@ -162,7 +162,7 @@
           "S3Bucket": {
             "Ref": "ServerlessDeploymentBucket"
           },
-          "S3Key": "serverless/myCarServices/dev/1729138658748-2024-10-17T04:17:38.748Z/myCarServices.zip"
+          "S3Key": "serverless/myCarServices/dev/1729282398291-2024-10-18T20:13:18.291Z/myCarServices.zip"
         },
         "Handler": "handler.hello",
         "Runtime": "nodejs18.x",
@@ -180,14 +180,14 @@
         "HelloLogGroup"
       ]
     },
-    "HelloLambdaVersionoFB7u5991soEXjYLQo6N8Yq1ZOHvB6FSgSxEjVHQ": {
+    "HelloLambdaVersionRwKQBqY1qg7xD5Lon8mJn3YziQ9gtgdQJERijsR5w": {
       "Type": "AWS::Lambda::Version",
       "DeletionPolicy": "Retain",
       "Properties": {
         "FunctionName": {
           "Ref": "HelloLambdaFunction"
         },
-        "CodeSha256": "dUnVXTU4xRdmGe7JsDkg1vXL/r1CN9snYUHFblEVRT4="
+        "CodeSha256": "PAtkogTMjQWVW0Fy1Dhmhg1gEYVlF6ScDeL1KGX7XSk="
       }
     },
     "ApiGatewayRestApi": {
@@ -263,7 +263,7 @@
         "HelloLambdaPermissionApiGateway"
       ]
     },
-    "ApiGatewayDeployment1729138657838": {
+    "ApiGatewayDeployment1729282396656": {
       "Type": "AWS::ApiGateway::Deployment",
       "Properties": {
         "RestApiId": {
@@ -311,12 +311,6 @@
           ]
         }
       }
-    },
-    "MyS3Bucket": {
-      "Type": "AWS::S3::Bucket",
-      "Properties": {
-        "BucketName": "my-car-services-bucket"
-      }
     }
   },
   "Outputs": {
@@ -331,7 +325,7 @@
     "HelloLambdaFunctionQualifiedArn": {
       "Description": "Current Lambda function version",
       "Value": {
-        "Ref": "HelloLambdaVersionoFB7u5991soEXjYLQo6N8Yq1ZOHvB6FSgSxEjVHQ"
+        "Ref": "HelloLambdaVersionRwKQBqY1qg7xD5Lon8mJn3YziQ9gtgdQJERijsR5w"
       },
       "Export": {
         "Name": "sls-myCarServices-dev-HelloLambdaFunctionQualifiedArn"
