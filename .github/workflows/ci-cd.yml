@@ -32,7 +32,7 @@ jobs:
       # Lancer les tests
       - name: Run tests
         run: npm test
-        working-directory: ./myCarServices/test
+        working-directory: myCarServices/test
 
   deploy:
     needs: build
