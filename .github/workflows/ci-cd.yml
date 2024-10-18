@@ -26,12 +26,12 @@ jobs:
 
       # Installer les dépendances du répertoire racine
       - name: Install dependencies at root
-        run: npm install
+        run: npm ci
     
 
       # Installer les dépendances pour myCarServices
       - name: Install dependencies for myCarServices
-        run: npm install
+        run: npm ci
         working-directory: myCarServices
 
       # Afficher le répertoire de travail actuel
@@ -40,8 +40,8 @@ jobs:
 
       # Lancer les tests
       - name: Run tests
-        run: cd myCarServices && npm test
-        #working-directory: myCarServices
+        run: npm test
+        working-directory: ./myCarServices
       
 
   deploy:
