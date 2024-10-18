@@ -4,6 +4,7 @@
   "description": "Solution to locate cars in real-time",
   "main": "index.js",
   "scripts": {
+    "test": "mocha ./myCarServices/test/**/*.test.js"
   },
   "repository": {
     "type": "git",
