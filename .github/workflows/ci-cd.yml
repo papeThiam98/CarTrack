@@ -24,12 +24,16 @@ jobs:
         with:
           node-version: '18'  # Choisis la version de Node.js utilisée dans ton projet
 
-      # Installer les dépendances du projet
-      - name: Install root dependencies
-        run: npm install 
-      - name: Install service dependencies 
+      # Installer les dépendances du répertoire racine
+      - name: Install dependencies at root
+        run: npm install
+        working-directory: ./CarTrack
+
+      # Installer les dépendances pour myCarServices
+      - name: Install dependencies for myCarServices
         run: npm install
         working-directory: ./myCarServices
+
       # Afficher le répertoire de travail actuel
       - name: Check current directory
         run: pwd
