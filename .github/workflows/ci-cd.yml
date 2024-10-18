@@ -40,8 +40,8 @@ jobs:
 
       # Lancer les tests
       - name: Run tests
-        run: npm test
-        working-directory: myCarServices
+        run: cd myCarServices && npm test
+        #working-directory: myCarServices
       
 
   deploy:
