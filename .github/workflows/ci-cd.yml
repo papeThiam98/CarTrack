@@ -29,12 +29,12 @@ jobs:
         run: |
           npm install
           pwd
-        working-directory: ./myCarServices/test
+        working-directory: ./myCarServices
 
       # Lancer les tests
       - name: Run tests
         run: npm test
-        working-directory: ./myCarServices
+        working-directory: ./myCarServices/test
 
   deploy:
     needs: build
