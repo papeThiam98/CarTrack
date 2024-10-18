@@ -1,0 +1,27 @@
+{
+  "name": "cartrack",
+  "version": "1.0.0",
+  "description": "Solution to locate cars in real-time",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/papeThiam98/CarTrack.git"
+  },
+  "author": "Pape Thiam",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/papeThiam98/CarTrack/issues"
+  },
+  "homepage": "https://github.com/papeThiam98/CarTrack#readme",
+  "dependencies": {
+    "@actions/core": "^1.11.1",
+    "@actions/github": "^6.0.0",
+    "aws": "^0.0.3-2",
+    "aws-sdk": "^2.1691.0",
+    "mocha": "^10.7.3",
+    "yarn": "^1.22.22"
+  }
+}
