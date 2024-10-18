@@ -56,3 +56,5 @@ jobs:
           npm install -g serverless
           cd myCarServices
           serverless deploy
+        env:
+          SERVERLESS_ACCESS_KEY: ${{ secrets.SLS_ACCESS_KEY }}
