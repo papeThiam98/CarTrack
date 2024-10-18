@@ -12,15 +12,18 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ../CarTrack      
 
     steps:
       # Cloner le dépôt
       - name: Checkout code
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Configurer Node.js
-      - name: Setup Node.js
-        uses: actions/setup-node@v2
+      - name: Setup Node.js 18
+        uses: actions/setup-node@v3
         with:
           node-version: '18'  # Choisis la version de Node.js utilisée dans ton projet
 
@@ -39,7 +42,7 @@ jobs:
     steps:
       # Cloner à nouveau le dépôt pour déploiement
       - name: Checkout code for deployment
-        uses: actions/checkout@v2
+        uses: actions/checkout@v3
 
       # Configurer AWS CLI
       - name: Configure AWS CLI
