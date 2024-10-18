@@ -52,7 +52,7 @@ jobs:
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: us-east-1  # Remplace par ta région AWS
+          aws-region: eu-west-1  # Remplace par ta région AWS
 
       # Déployer ton service avec Serverless Framework
       - name: Deploy with Serverless
