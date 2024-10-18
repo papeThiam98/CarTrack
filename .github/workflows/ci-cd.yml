@@ -33,8 +33,8 @@ jobs:
         run: pwd
 
       # Lister les fichiers et dossiers dans le répertoire de travail actuel
-      - name: List files
-        run: ls -la
+      - name: Switch repository
+        run: cd myCarServices
 
       # Lancer les tests
       - name: Run tests
