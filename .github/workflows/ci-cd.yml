@@ -19,11 +19,11 @@ jobs:
     steps:
       # Cloner le dépôt
       - name: Checkout code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Configurer Node.js
       - name: Setup Node.js 18
-        uses: actions/setup-node@v3
+        uses: actions/setup-node@v4
         with:
           node-version: '18'  # Choisis la version de Node.js utilisée dans ton projet
 
@@ -42,7 +42,7 @@ jobs:
     steps:
       # Cloner à nouveau le dépôt pour déploiement
       - name: Checkout code for deployment
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       # Configurer AWS CLI
       - name: Configure AWS CLI
