@@ -8,6 +8,22 @@
       "name": "aws",
       "runtime": "nodejs18.x",
       "region": "eu-west-1",
+      "iam": {
+        "role": {
+          "statements": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "s3:*",
+                "logs:*",
+                "lambda:*",
+                "cloudwatch:*"
+              ],
+              "Resource": "*"
+            }
+          ]
+        }
+      },
       "stage": "dev",
       "versionFunctions": true,
       "compiledCloudFormationTemplate": {
@@ -89,6 +105,18 @@
               "LogGroupName": "/aws/lambda/myCarServices-dev-hello"
             }
           },
+          "UpdateLastModifiedLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/myCarServices-dev-updateLastModified"
+            }
+          },
+          "CleanupInactivityBucketsLogGroup": {
+            "Type": "AWS::Logs::LogGroup",
+            "Properties": {
+              "LogGroupName": "/aws/lambda/myCarServices-dev-cleanupInactivityBuckets"
+            }
+          },
           "IamRoleLambdaExecution": {
             "Type": "AWS::IAM::Role",
             "Properties": {
@@ -146,6 +174,9 @@
                             "Fn::Sub": "arn:${AWS::Partition}:logs:${AWS::Region}:${AWS::AccountId}:log-group:/aws/lambda/myCarServices-dev*:*:*"
                           }
                         ]
+                      },
+                      {
+                        "$ref": "$[\"service\"][\"provider\"][\"iam\"][\"role\"][\"statements\"][0]"
                       }
                     ]
                   }
@@ -174,7 +205,7 @@
                 "S3Bucket": {
                   "Ref": "ServerlessDeploymentBucket"
                 },
-                "S3Key": "serverless/myCarServices/dev/1729312382300-2024-10-19T04:33:02.300Z/myCarServices.zip"
+                "S3Key": "serverless/myCarServices/dev/1729379198562-2024-10-19T23:06:38.562Z/myCarServices.zip"
               },
               "Handler": "handler.hello",
               "Runtime": "nodejs18.x",
@@ -192,14 +223,126 @@
               "HelloLogGroup"
             ]
           },
-          "HelloLambdaVersion6s5YqJefNSwLVvvmh0IkvKdFRbQEPA2VyM4AkrJi5dk": {
+          "UpdateLastModifiedLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/myCarServices/dev/1729379198562-2024-10-19T23:06:38.562Z/myCarServices.zip"
+              },
+              "Handler": "handler.updateLastModified",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "myCarServices-dev-updateLastModified",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "UpdateLastModifiedLogGroup"
+            ]
+          },
+          "CleanupInactivityBucketsLambdaFunction": {
+            "Type": "AWS::Lambda::Function",
+            "Properties": {
+              "Code": {
+                "S3Bucket": {
+                  "Ref": "ServerlessDeploymentBucket"
+                },
+                "S3Key": "serverless/myCarServices/dev/1729379198562-2024-10-19T23:06:38.562Z/myCarServices.zip"
+              },
+              "Handler": "handler.cleanupInacticityBuckets",
+              "Runtime": "nodejs18.x",
+              "FunctionName": "myCarServices-dev-cleanupInactivityBuckets",
+              "MemorySize": 1024,
+              "Timeout": 6,
+              "Environment": {
+                "Variables": {
+                  "BUCKET_NAME": "car-track-bucket-clean"
+                }
+              },
+              "Role": {
+                "Fn::GetAtt": [
+                  "IamRoleLambdaExecution",
+                  "Arn"
+                ]
+              }
+            },
+            "DependsOn": [
+              "CleanupInactivityBucketsLogGroup"
+            ]
+          },
+          "HelloLambdaVersiondzKwk9BUAHCnNOxiILJxiZ3q9olfivYjQ4wGdw5iew": {
             "Type": "AWS::Lambda::Version",
             "DeletionPolicy": "Retain",
             "Properties": {
               "FunctionName": {
                 "Ref": "HelloLambdaFunction"
               },
-              "CodeSha256": "qPOFnbj8z2RAGE8KQ5Xspw/F/wzhHkgW+EpASdGgm5A="
+              "CodeSha256": "/cTLgeRyXkHWTO096NSOfVruzVie6ff4LsaLIlgji1g="
+            }
+          },
+          "UpdateLastModifiedLambdaVersion8ovzViKdFmzbipOndx6W3VUnmgcWP080nvRrFxiRE": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "UpdateLastModifiedLambdaFunction"
+              },
+              "CodeSha256": "/cTLgeRyXkHWTO096NSOfVruzVie6ff4LsaLIlgji1g="
+            }
+          },
+          "CleanupInactivityBucketsLambdaVersion33MAlHkEvC5lnzBCEDPuW9W8klZR95ecYRQg1lkLI": {
+            "Type": "AWS::Lambda::Version",
+            "DeletionPolicy": "Retain",
+            "Properties": {
+              "FunctionName": {
+                "Ref": "CleanupInactivityBucketsLambdaFunction"
+              },
+              "CodeSha256": "/cTLgeRyXkHWTO096NSOfVruzVie6ff4LsaLIlgji1g="
+            }
+          },
+          "CleanupInactivityBucketsEventsRuleSchedule1": {
+            "Type": "AWS::Events::Rule",
+            "Properties": {
+              "ScheduleExpression": "rate(1 day)",
+              "State": "ENABLED",
+              "Targets": [
+                {
+                  "Arn": {
+                    "Fn::GetAtt": [
+                      "CleanupInactivityBucketsLambdaFunction",
+                      "Arn"
+                    ]
+                  },
+                  "Id": "cleanupInactivityBucketsSchedule"
+                }
+              ]
+            }
+          },
+          "CleanupInactivityBucketsLambdaPermissionEventsRuleSchedule1": {
+            "Type": "AWS::Lambda::Permission",
+            "Properties": {
+              "FunctionName": {
+                "Fn::GetAtt": [
+                  "CleanupInactivityBucketsLambdaFunction",
+                  "Arn"
+                ]
+              },
+              "Action": "lambda:InvokeFunction",
+              "Principal": "events.amazonaws.com",
+              "SourceArn": {
+                "Fn::GetAtt": [
+                  "CleanupInactivityBucketsEventsRuleSchedule1",
+                  "Arn"
+                ]
+              }
             }
           },
           "ApiGatewayRestApi": {
@@ -275,7 +418,7 @@
               "HelloLambdaPermissionApiGateway"
             ]
           },
-          "ApiGatewayDeployment1729312376115": {
+          "ApiGatewayDeployment1729379191463": {
             "Type": "AWS::ApiGateway::Deployment",
             "Properties": {
               "RestApiId": {
@@ -323,6 +466,12 @@
                 ]
               }
             }
+          },
+          "S3Bucket": {
+            "Type": "AWS::S3::Bucket",
+            "Properties": {
+              "BucketName": "car-track-bucket-resources"
+            }
           }
         },
         "Outputs": {
@@ -337,10 +486,28 @@
           "HelloLambdaFunctionQualifiedArn": {
             "Description": "Current Lambda function version",
             "Value": {
-              "Ref": "HelloLambdaVersion6s5YqJefNSwLVvvmh0IkvKdFRbQEPA2VyM4AkrJi5dk"
+              "Ref": "HelloLambdaVersiondzKwk9BUAHCnNOxiILJxiZ3q9olfivYjQ4wGdw5iew"
             },
             "Export": {
               "Name": "sls-myCarServices-dev-HelloLambdaFunctionQualifiedArn"
+            }
+          },
+          "UpdateLastModifiedLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "UpdateLastModifiedLambdaVersion8ovzViKdFmzbipOndx6W3VUnmgcWP080nvRrFxiRE"
+            },
+            "Export": {
+              "Name": "sls-myCarServices-dev-UpdateLastModifiedLambdaFunctionQualifiedArn"
+            }
+          },
+          "CleanupInactivityBucketsLambdaFunctionQualifiedArn": {
+            "Description": "Current Lambda function version",
+            "Value": {
+              "Ref": "CleanupInactivityBucketsLambdaVersion33MAlHkEvC5lnzBCEDPuW9W8klZR95ecYRQg1lkLI"
+            },
+            "Export": {
+              "Name": "sls-myCarServices-dev-CleanupInactivityBucketsLambdaFunctionQualifiedArn"
             }
           },
           "ServiceEndpoint": {
@@ -367,6 +534,12 @@
             },
             "Export": {
               "Name": "sls-myCarServices-dev-ServiceEndpoint"
+            }
+          },
+          "BucketName": {
+            "Description": "car-track-bucket-output",
+            "Value": {
+              "Ref": "S3Bucket"
             }
           }
         }
@@ -474,7 +647,61 @@
         "timeout": 6,
         "runtime": "nodejs18.x",
         "vpc": {},
-        "versionLogicalId": "HelloLambdaVersion6s5YqJefNSwLVvvmh0IkvKdFRbQEPA2VyM4AkrJi5dk"
+        "versionLogicalId": "HelloLambdaVersiondzKwk9BUAHCnNOxiILJxiZ3q9olfivYjQ4wGdw5iew"
+      },
+      "updateLastModified": {
+        "handler": "handler.updateLastModified",
+        "events": [
+          {
+            "bucket": "car-track-bucket-update",
+            "event": "s3:ObjectCreated:Put",
+            "existing": true,
+            "s3": null
+          }
+        ],
+        "name": "myCarServices-dev-updateLastModified",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs18.x",
+        "vpc": {},
+        "versionLogicalId": "UpdateLastModifiedLambdaVersion8ovzViKdFmzbipOndx6W3VUnmgcWP080nvRrFxiRE"
+      },
+      "cleanupInactivityBuckets": {
+        "handler": "handler.cleanupInacticityBuckets",
+        "events": [
+          {
+            "schedule": "rate(1 day)"
+          }
+        ],
+        "environment": {
+          "BUCKET_NAME": "car-track-bucket-clean"
+        },
+        "name": "myCarServices-dev-cleanupInactivityBuckets",
+        "package": {},
+        "memory": 1024,
+        "timeout": 6,
+        "runtime": "nodejs18.x",
+        "vpc": {},
+        "versionLogicalId": "CleanupInactivityBucketsLambdaVersion33MAlHkEvC5lnzBCEDPuW9W8klZR95ecYRQg1lkLI"
+      }
+    },
+    "resources": {
+      "Resources": {
+        "S3Bucket": {
+          "Type": "AWS::S3::Bucket",
+          "Properties": {
+            "BucketName": "car-track-bucket-resources"
+          }
+        }
+      },
+      "Outputs": {
+        "BucketName": {
+          "Description": "car-track-bucket-output",
+          "Value": {
+            "Ref": "S3Bucket"
+          }
+        }
       }
     },
     "configValidationMode": "warn",
@@ -486,6 +713,9 @@
       },
       "functions": {
         "$ref": "$[\"service\"][\"functions\"]"
+      },
+      "resources": {
+        "$ref": "$[\"service\"][\"resources\"]"
       }
     },
     "layers": {},
@@ -493,7 +723,7 @@
     "artifact": "/Users/abdoulayethiam/Documents/PersonalProjects/CarTrack/CarTrack/myCarServices/.serverless/myCarServices.zip"
   },
   "package": {
-    "artifactDirectoryName": "serverless/myCarServices/dev/1729312382300-2024-10-19T04:33:02.300Z",
+    "artifactDirectoryName": "serverless/myCarServices/dev/1729379198562-2024-10-19T23:06:38.562Z",
     "artifact": "myCarServices.zip"
   }
 }

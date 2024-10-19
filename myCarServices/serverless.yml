@@ -4,6 +4,16 @@ provider:
   name: aws
   runtime: nodejs18.x  # Utiliser Node.js 18 pour la fonction Lambda
   region: eu-west-1    # Remplacer par ta région AWS
+  iam:
+    role:
+      statements:
+        - Effect: "Allow"
+          Action:
+            - "s3:*"
+            - "logs:*"
+            - "lambda:*"
+            - "cloudwatch:*"
+          Resource: "*"
 
 functions:
   hello:
@@ -12,3 +22,30 @@ functions:
       - http:
           path: hello
           method: get  # Crée un endpoint HTTP pour appeler la fonction Lambda
+  updateLastModified:
+    handler: handler.updateLastModified
+    events:
+      - s3:
+        bucket: car-track-bucket-update
+        event: s3:ObjectCreated:Put
+        existing: true
+  # Function to check for bucket inactivity and delte it
+  cleanupInactivityBuckets:
+    handler: handler.cleanupInacticityBuckets
+    events:
+      - schedule: rate(1 day)
+    environment:
+      BUCKET_NAME: car-track-bucket-clean
+
+resources:
+  Resources:
+    S3Bucket:
+      Type: AWS::S3::Bucket
+      Properties:
+        BucketName: car-track-bucket-resources
+
+  Outputs:
+    BucketName:
+      Description: car-track-bucket-output
+      Value:
+        Ref: S3Bucket
