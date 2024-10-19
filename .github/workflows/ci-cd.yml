@@ -60,7 +60,6 @@ jobs:
           -Dsonar.organization=${{ secrets.SONARORGANIZATION }} \
           -Dsonar.host.url= https://sonarcloud.io \
           -Dsonar.sources=${{ secrets.SONARSOURCES}}
-          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
 
   deploy:
     needs: build
