@@ -4,7 +4,9 @@
   "description": "Solution to locate cars in real-time",
   "main": "index.js",
   "scripts": {
-    "test": ""
+    "test": "",
+    "lint": "eslint .  --ext .js",
+    "lint-fix": "eslint --fix .  --ext .js"
   },
   "repository": {
     "type": "git",
@@ -25,6 +27,11 @@
     "yarn": "^1.22.22"
   },
   "devDependencies": {
+    "eslint": "^8.57.1",
+    "eslint-config-standard": "^17.1.0",
+    "eslint-plugin-import": "^2.31.0",
+    "eslint-plugin-n": "^16.6.2",
+    "eslint-plugin-promise": "^6.6.0",
     "serverless": "^3.30.0"
   }
 }
