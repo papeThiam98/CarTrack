@@ -60,7 +60,7 @@ jobs:
           -Dsonar.sources=${{ secrets.SONARSOURCES}}
           -Dsonar.language= js \
           -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
-        working-directory: ./myCarServices
+
 
   deploy:
     needs: build
