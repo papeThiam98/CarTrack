@@ -55,12 +55,11 @@ jobs:
       - name: Run SonarCloud analysis
         run: |
           sonar-scanner \
-          -Dsonar.login=${{ secrets.SONARTOKEN }} \
+          -Dsonar.token=${{ secrets.SONARTOKEN }} \
           -Dsonar.projectKey=${{ secrets.SONARPROJECTKEY }} \
           -Dsonar.organization=${{ secrets.SONARORGANIZATION }} \
           -Dsonar.host.url= https://sonarcloud.io \
           -Dsonar.sources=${{ secrets.SONARSOURCES}}
-          -Dsonar.language= js \
           -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
 
   deploy:
