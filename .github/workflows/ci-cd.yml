@@ -52,6 +52,7 @@ jobs:
     steps:
       - name: Install Sonar
         run: npm install -g sonarqube-scanner
+        working-directory: ./myCarServices
       - name: Run SonarCloud analysis
         run: |
           sonar-scanner \
