@@ -45,6 +45,22 @@ jobs:
         run: npm test
         working-directory: ./myCarServices
       
+  security-scan:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Run SonarCloud analysis
+        run: |
+          sonar-scanner \
+          -Dsonar.login=${{ secrets.SONARTOKEN }} \
+          -Dsonar.projectKey=${{ secrets.SONARPROJECTKEY }} \
+          -Dsonar.organization=${{ secrets.SONARORGANIZATION }} \
+          -Dsonar.host.url= https://sonarcloud.io \
+          -Dsonar.sources=${{ secrets.SONARSOURCES}}
+          -Dsonar.language= js \
+          -Dsonar.javascript.lcov.reportPaths=coverage/lcov.info
+        working-directory: ./myCarServices
 
   deploy:
     needs: build
