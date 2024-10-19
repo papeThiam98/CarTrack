@@ -50,6 +50,8 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      - name: Install Sonar
+        run: npm install -g sonarqube-scanner
       - name: Run SonarCloud analysis
         run: |
           sonar-scanner \
