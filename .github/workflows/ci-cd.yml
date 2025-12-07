@@ -60,7 +60,9 @@ jobs:
 
       - name: Deploy Serverless
         run: npx serverless deploy --stage dev
+        working-directory: myCarServices
 
       - name: Run Integration Tests
         run: npm run test:integ
+        working-directory: myCarServices
 
