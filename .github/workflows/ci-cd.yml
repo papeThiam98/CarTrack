@@ -1,7 +1,3 @@
-# ============================
-# .github/workflows/ci-cd.yml
-# ============================
-
 name: CI-CD
 
 on:
@@ -18,22 +14,25 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Install dependencies
+        working-directory: myCarServices
         run: npm install --legacy-peer-deps
 
       - name: Run ESLint
+        working-directory: myCarServices
         run: npm run lint
 
       - name: Run Unit Tests
+        working-directory: myCarServices
         run: npm test
 
       - name: Archive build
         uses: actions/upload-artifact@v4
         with:
           name: build-artifact
-          path: .
+          path: myCarServices
 
   deploy:
     needs: build-test-lint
@@ -46,9 +45,10 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: 18
+          node-version: 20
 
       - name: Install dependencies
+        working-directory: myCarServices
         run: npm install --legacy-peer-deps
 
       - name: Configure AWS Credentials
@@ -59,10 +59,9 @@ jobs:
           aws-region: eu-west-1
 
       - name: Deploy Serverless
-        run: npx serverless deploy --stage dev
         working-directory: myCarServices
+        run: npx serverless deploy --stage dev
 
       - name: Run Integration Tests
-        run: npm run test:integ
         working-directory: myCarServices
-
+        run: npm run test:integ
