@@ -19,16 +19,16 @@ module.exports = {
   ],
   parserOptions: {
     ecmaVersion: 'latest'
-  },
-  rules: {
-    'prettier/prettier': [
-      'error',
-      {
-        semi: true, // Ajoute automatiquement des points-virgules
-        singleQuote: true, // Utilise des simples quotes
-        trailingComma: 'es5', // Ajoute des virgules de fin là où c'est possible
-        endOfLine: 'auto' // Gère les retours à la ligne en fonction du système d'exploitation
-      }
-    ]
   }
+  // rules: {
+  //   'prettier/prettier': [
+  //     'error',
+  //     {
+  //       semi: true, // Ajoute automatiquement des points-virgules
+  //       singleQuote: true, // Utilise des simples quotes
+  //       trailingComma: 'es5', // Ajoute des virgules de fin là où c'est possible
+  //       endOfLine: 'auto' // Gère les retours à la ligne en fonction du système d'exploitation
+  //     }
+  //   ]
+  // }
 }
