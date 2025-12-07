@@ -1,6 +1,6 @@
 // handler.js
 const AWS = require('aws-sdk')
-const s3 = new AWS.S3()
+// const s3 = new AWS.S3()
 exports.hello = async (event) => {
   return {
     statusCode: 200,
