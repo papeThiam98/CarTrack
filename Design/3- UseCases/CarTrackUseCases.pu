@@ -1,9 +1,10 @@
 @startuml
 
-rectangle "CarTrack in Operational phase.." as CT {
-    "Track Car" as (Track)
-    "Display the current location of the car" as (Curr)
+rectangle "CarTrack in Operational phase" as CT {
+    "Track their cars" as (Track)
+    "Display the current location of the car if car is running" as (Curr)
     "Display the 10 latest locations of the car" as (Lat)
+    "Display last location if the car is off" as (Off)
 }
 actor "Car Owner" as co
 rectangle "External Systems" as ExSys{
@@ -18,6 +19,7 @@ rectangle "External Systems" as ExSys{
 left to right direction
 (Track).>(Curr): include
 (Track).>(Lat): include
+(Track).>(Off): include 
 
 :co:-->(Track)
 

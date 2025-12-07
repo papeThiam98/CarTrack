@@ -1,88 +1,66 @@
-name: CI/CD Pipeline
+# ============================
+# .github/workflows/ci-cd.yml
+# ============================
 
-# Déclencher le workflow sur chaque push ou pull request vers la branche main
+name: CI-CD
+
 on:
   push:
-    branches:
-      - main
-  pull_request:
-    branches:
-      - main
+    branches: [ "main" ]
 
-  # Allows you to run this workflow manually from the Actions tab
-  workflow_dispatch:
 jobs:
-  build:
-    runs-on: ubuntu-latest    
-
+  build-test-lint:
+    runs-on: ubuntu-latest
     steps:
-      # Cloner le dépôt
-      - name: Checkout code
+      - name: Checkout repository
         uses: actions/checkout@v4
-      
-      # Configurer Node.js
-      - name: Setup Node.js 18
+
+      - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '18'  # Choisis la version de Node.js utilisée dans ton projet
+          node-version: 18
 
-      # Installer les dépendances du répertoire racine
-      - name: Install dependencies at root
-        run: npm ci
-    
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
 
-      # Installer les dépendances pour myCarServices
-      - name: Install dependencies for myCarServices
-        run: npm ci
-        working-directory: ./myCarServices
+      - name: Run ESLint
+        run: npm run lint
 
-      # Afficher le répertoire de travail actuel
-      - name: Check current directory
-        run: pwd
-
-      # Lancer les tests
-      - name: Run tests
+      - name: Run Unit Tests
         run: npm test
-        working-directory: ./myCarServices
-      
-  security-scan:
-    needs: build
-    runs-on: ubuntu-latest
 
-    steps:
-      - name: Install Sonar
-        run: npm install -g sonarqube-scanner
-      - name: Run SonarCloud analysis
-        run: |
-          sonar-scanner \
-          -Dsonar.token=${{ secrets.SONARTOKEN }} \
-          -Dsonar.projectKey=${{ secrets.SONARPROJECTKEY }} \
-          -Dsonar.organization=${{ secrets.SONARORGANIZATION }} \
-          -Dsonar.host.url= https://sonarcloud.io \
-          -Dsonar.sources=${{ secrets.SONARSOURCES}}
+      - name: Archive build
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-artifact
+          path: .
 
   deploy:
-    needs: build
+    needs: build-test-lint
     runs-on: ubuntu-latest
-
+    environment: dev
     steps:
-      # Cloner à nouveau le dépôt pour déploiement
-      - name: Checkout code for deployment
+      - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Configurer AWS CLI
-      - name: Configure AWS CLI
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+
+      - name: Install dependencies
+        run: npm install --legacy-peer-deps
+
+      - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v4
         with:
           aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
           aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-          aws-region: eu-west-1  # Remplace par ta région AWS
+          aws-region: eu-west-1
 
-      # Déployer ton service avec Serverless Framework
-      - name: Deploy with Serverless
-        run: |
-          npm install -g serverless
-          cd myCarServices
-          serverless deploy
-        env:
-          SERVERLESS_ACCESS_KEY: ${{ secrets.SLS_ACCESS_KEY }}
+      - name: Deploy Serverless
+        run: npx serverless deploy --stage dev
+
+      - name: Run Integration Tests
+        run: npm run test:integ
+

@@ -1,0 +1,6 @@
+@startuml
+actor CarOwner
+participant apiGateway
+participant frontApp
+
+@enduml

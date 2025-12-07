@@ -22,7 +22,9 @@
         "serverless": "^3.30.0"
     },
     "dependencies": {
+        "@aws-sdk/client-s3": "^3.939.0",
         "assert": "^2.1.0",
+        "aws-sdk": "^2.1692.0",
         "sinon": "^19.0.2"
     }
 }
